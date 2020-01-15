@@ -1,10 +1,8 @@
-﻿using DotNetDynDnsSvc.Class;
-using System;
-using System.Collections.Generic;
+﻿using DotNetDynDnsSvc.Data;
 using System.Linq;
 using System.Web;
 
-namespace DotNetDynDnsSvc.Controllers
+namespace DotNetDynDnsSvc.Server
 {
     public class Authenticator
     {

@@ -1,12 +1,10 @@
-﻿using DotNetDynDnsSvc.Class;
+﻿using DotNetDynDnsSvc.Data;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Web;
 
-namespace DotNetDynDnsSvc.Controllers
+namespace DotNetDynDnsSvc.Server
 {
     public class LogWriter
     {

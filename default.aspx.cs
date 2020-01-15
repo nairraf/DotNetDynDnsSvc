@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
+﻿using DotNetDynDnsSvc.Data;
+using DotNetDynDnsSvc.Server;
+using System;
 using System.Web.UI.WebControls;
-using DotNetDynDnsSvc.Class;
-using DotNetDynDnsSvc.Controllers;
 
 namespace DotNetDynDnsSvc
 {

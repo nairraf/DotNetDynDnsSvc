@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace DotNetDynDnsSvc.Class
+﻿namespace DotNetDynDnsSvc.Data
 {
     public class LogData
     {
