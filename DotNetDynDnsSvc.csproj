@@ -90,8 +90,10 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\AuthenticationModel.cs" />
     <Compile Include="Data\LogData.cs" />
-    <Compile Include="Server\Authenticator.cs" />
+    <Compile Include="Data\User.cs" />
+    <Compile Include="Server\httpManager.cs" />
     <Compile Include="Server\LogWriter.cs" />
     <Compile Include="default.aspx.cs">
       <DependentUpon>default.aspx</DependentUpon>

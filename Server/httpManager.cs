@@ -4,7 +4,7 @@ using System.Web;
 
 namespace DotNetDynDnsSvc.Server
 {
-    public class Authenticator
+    public class httpManager
     {
         private HttpRequest _request;
         private HttpContext _context;
@@ -14,10 +14,33 @@ namespace DotNetDynDnsSvc.Server
         public string userName { get { return _userName; } }
         public string userPassword { get { return _userPassword; } }
 
-        public Authenticator(HttpRequest httpRequest, HttpContext httpContext)
+        public httpManager(HttpRequest httpRequest, HttpContext httpContext)
         {
             _request = httpRequest;
             _context = httpContext;
+        }
+
+
+        // finished here: need to make the manager responsible for returning error codes
+        // refactor the Validate method to use the methods for returning error codes
+        // this way other class's can use the error codes.
+        public void ReturnError(int errorCode, string message)
+        {
+            _context.Response.Status = "400 Request Type Not Supported";
+            _context.Response.StatusCode = 400;
+            _context.Response.Clear();
+
+            // build the data we want to log and log it
+            LogData log = new LogData();
+            log.responseCode = "400";
+            log.responseString = "Request Type Not Supported";
+
+            LogWriter logWriter = new LogWriter(_request);
+            logWriter.WriteLine(log);
+
+            // end our connection with the browser
+            _context.Response.End();
+            return;
         }
 
         public bool Validate()
