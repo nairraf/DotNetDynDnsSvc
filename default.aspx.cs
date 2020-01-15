@@ -12,11 +12,20 @@ namespace DotNetDynDnsSvc
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            // create our authenticator, and validate the incoming HTTP request
+            // this makes sure that there is some kind of username/password present in the basic authentication HTTP header.
             Authenticator auth = new Authenticator(Request, Context);
-            if (auth.Validate())
-            {
-                Message.Controls.Add(new Literal() { Text = String.Format("<div>Access Granted <br /> User: {0}, Password: {1}</div>", auth.userName, auth.userPassword) });
-            }
+            auth.Validate();
+
+
+            // just echo out the username and password for now.
+            Message.Controls.Add(new Literal() { Text = String.Format("<div>Access Granted <br /> User: {0}, Password: {1}</div>", auth.userName, auth.userPassword) });
+
+            List<string> logs = new List<string>();
+            logs.Add(auth.userName);
+            logs.Add(auth.userPassword);
+            LogWriter logWriter = new LogWriter();
+            logWriter.WriteLine(logs);
         }
     }
 }

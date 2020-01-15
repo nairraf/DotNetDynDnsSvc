@@ -9,18 +9,30 @@ namespace DotNetDynDnsSvc.Controllers
     {
         private HttpRequest _request;
         private HttpContext _context;
+        private string _userName = "";
+        private string _userPassword = "";
 
-        public string userName { get; set; }
-        public string userPassword { get; set; }
+        public string userName { get { return _userName; } }
+        public string userPassword { get { return _userPassword; } }
 
         public Authenticator(HttpRequest httpRequest, HttpContext httpContext)
         {
-            _context = httpContext;
             _request = httpRequest;
+            _context = httpContext;
         }
 
         public bool Validate()
         {
+            // get the raw authentication header from the HTTP stream
+            // validate that it's not empty
+            // and that it can be decoded and parsed into a username and password
+            // make sure that we have set the _userName and _userPassword appropriately
+            // return true on a successful validation
+            //      NOTE: this does not authenticate the user
+            //            it just validates that there is a username/password in the HTTTP request.
+            // return false if not successful for any reason
+            // if not successful, return 403 forbidden or 400 bad request if
+            // the HTTP request cannot be validated for some reason.
             string authHeader = _request.ServerVariables.Get("HTTP_AUTHORIZATION");
             if (authHeader == null || authHeader == "")
             {
@@ -31,19 +43,32 @@ namespace DotNetDynDnsSvc.Controllers
                 return false;
             }
 
-            string encodedAuthHeader, decodedAuthHeader;
+            string encodedAuth, decodedAuth;
             bool authError = false;
 
             if (authHeader.ToLower().Contains("basic"))
             {
-                encodedAuthHeader = (authHeader.Split(' '))[1];
-                decodedAuthHeader = System.Text.ASCIIEncoding.ASCII.GetString(System.Convert.FromBase64String(encodedAuthHeader));
-                if (decodedAuthHeader.Contains(":"))
+                encodedAuth = (authHeader.Split(' '))[1];
+                decodedAuth = System.Text.ASCIIEncoding.ASCII.GetString(System.Convert.FromBase64String(encodedAuth));
+                if (decodedAuth.Contains(":"))
                 {
-                    string[] decodedSplit = decodedAuthHeader.Split(':');
-                    userName = decodedSplit[0];
-                    userPassword = decodedSplit[1];
-                    if (userName.Length <= 0 || userPassword.Length <= 0 || userPassword == null || userName == null)
+                    string[] decodedSplit = decodedAuth.Split(':');
+                    if (decodedSplit.Count() == 2)
+                    {
+                        if (decodedSplit[0] != null)
+                        {
+                            if (decodedSplit[0].Length > 0)
+                                _userName = decodedSplit[0];
+                        }
+
+                        if (decodedSplit[1] != null)
+                        {
+                            if (decodedSplit[1].Length > 0)
+                                _userPassword = decodedSplit[1];
+                        }
+                    }
+                    
+                    if (userName.Length <= 0 || userPassword.Length <= 0 )
                     {
                         authError = true;
                     }
@@ -54,6 +79,7 @@ namespace DotNetDynDnsSvc.Controllers
                 authError = true;
             }
 
+            // return error 400 bad request and return false if the HTTP request cannot be successfully validated
             if (authError)
             {
                 _context.Response.Status = "400 Bad Request";
@@ -63,8 +89,8 @@ namespace DotNetDynDnsSvc.Controllers
                 return false;
             }
 
+            // if we get here, then we return true as the userName and userPassword properties have been successfully set.
             return true;
         }
-
     }
 }
