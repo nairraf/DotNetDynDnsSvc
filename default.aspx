@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="default.aspx.cs" Inherits="DotNetDynDnsSvc._default" Trace="false" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="default.aspx.cs" Inherits="DotNetDynDnsSvc._default" Trace="true" %>
 
 <!DOCTYPE html>
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DotNetDynDnsSvc.Class;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -23,6 +24,26 @@ namespace DotNetDynDnsSvc.Controllers
 
         public bool Validate()
         {
+            // validate that this request is a get request, we only process get requests, all others are forbidden
+            if ( _request.ServerVariables.Get("REQUEST_METHOD") != "GET" )
+            {
+                _context.Response.Status = "400 Request Type Not Supported";
+                _context.Response.StatusCode = 400;
+                _context.Response.Clear();
+
+                // build the data we want to log and log it
+                LogData log = new LogData();
+                log.responseCode = "400";
+                log.responseString = "Request Type Not Supported";
+
+                LogWriter logWriter = new LogWriter(_request);
+                logWriter.WriteLine(log);
+
+                // end our connection with the browser
+                _context.Response.End();
+                return false;
+            }
+
             // get the raw authentication header from the HTTP stream
             // validate that it's not empty
             // and that it can be decoded and parsed into a username and password
@@ -39,6 +60,16 @@ namespace DotNetDynDnsSvc.Controllers
                 _context.Response.Status = "403 Forbidden";
                 _context.Response.StatusCode = 403;
                 _context.Response.Clear();
+                
+                // build the data we want to log and log it
+                LogData log = new LogData();
+                log.responseCode = "403";
+                log.responseString = "Forbidden";
+
+                LogWriter logWriter = new LogWriter(_request);
+                logWriter.WriteLine(log);
+
+                // end our connection with the browser
                 _context.Response.End();
                 return false;
             }
@@ -85,6 +116,16 @@ namespace DotNetDynDnsSvc.Controllers
                 _context.Response.Status = "400 Bad Request";
                 _context.Response.StatusCode = 400;
                 _context.Response.Clear();
+                
+                // build the data we want to log and log it
+                LogData log = new LogData();
+                log.responseCode = "400";
+                log.responseString = "Bad Request";
+
+                LogWriter logWriter = new LogWriter(_request);
+                logWriter.WriteLine(log);
+
+                // end our connection with the browser
                 _context.Response.End();
                 return false;
             }

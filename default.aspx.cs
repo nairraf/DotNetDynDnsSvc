@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using DotNetDynDnsSvc.Class;
 using DotNetDynDnsSvc.Controllers;
 
 namespace DotNetDynDnsSvc
@@ -21,11 +22,13 @@ namespace DotNetDynDnsSvc
             // just echo out the username and password for now.
             Message.Controls.Add(new Literal() { Text = String.Format("<div>Access Granted <br /> User: {0}, Password: {1}</div>", auth.userName, auth.userPassword) });
 
-            List<string> logs = new List<string>();
-            logs.Add(auth.userName);
-            logs.Add(auth.userPassword);
-            LogWriter logWriter = new LogWriter();
-            logWriter.WriteLine(logs);
+            // build the data we want to log and log it
+            LogData log = new LogData();
+            log.username = auth.userName;
+            log.password = auth.userPassword;
+
+            LogWriter logWriter = new LogWriter(Request);
+            logWriter.WriteLine(log);
         }
     }
 }
