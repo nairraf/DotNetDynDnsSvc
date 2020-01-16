@@ -18,15 +18,12 @@ namespace DotNetDynDnsSvc
             // just echo out the username and password for now.
             AuthenticationModel dbAuth = new AuthenticationModel();
             User dbuser = dbAuth.AuthenticateUser(manager.userName, manager.userPassword);
-            if (dbuser.isAuthenticated)
+            if (dbuser.isAuthenticated == false)
             {
-                Message.Controls.Add(new Literal() { Text = String.Format("<div>Access Granted <br /> User: {0}, Password: {1}</div>", manager.userName, manager.userPassword) });
+                manager.ReturnError(403, "Invalid Username and/or password. Access is denied");
             }
-            else
-            {
-                Message.Controls.Add(new Literal() { Text = String.Format("<div>Access Denied <br /> User: {0}, Password: {1}</div>", manager.userName, manager.userPassword) });
-            }
-            
+
+            Message.Controls.Add(new Literal() { Text = String.Format("<div>Access Granted <br /> User: {0}, Password: {1}</div>", dbuser.username, dbuser.key) });
 
             // build the data we want to log and log it
             LogData log = new LogData();

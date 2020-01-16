@@ -1,4 +1,5 @@
 ﻿using DotNetDynDnsSvc.Data;
+using System;
 using System.Linq;
 using System.Web;
 
@@ -20,27 +21,32 @@ namespace DotNetDynDnsSvc.Server
             _context = httpContext;
         }
 
-
-        // finished here: need to make the manager responsible for returning error codes
-        // refactor the Validate method to use the methods for returning error codes
-        // this way other class's can use the error codes.
         public void ReturnError(int errorCode, string message)
         {
-            _context.Response.Status = "400 Request Type Not Supported";
-            _context.Response.StatusCode = 400;
+            _context.Response.Status = String.Format("{0} {1}", errorCode.ToString(), message);
+            _context.Response.StatusCode = errorCode;
             _context.Response.Clear();
 
             // build the data we want to log and log it
             LogData log = new LogData();
-            log.responseCode = "400";
-            log.responseString = "Request Type Not Supported";
+            log.responseCode = String.Format("{0}", errorCode.ToString());
+            log.responseString = String.Format("{0}", message);
+            
+            if ( _userName.Length > 0 )
+            {
+                log.username = _userName;
+            }
+
+            if ( _userPassword.Length > 0 )
+            {
+                log.password = _userPassword;
+            }
 
             LogWriter logWriter = new LogWriter(_request);
             logWriter.WriteLine(log);
 
             // end our connection with the browser
             _context.Response.End();
-            return;
         }
 
         public bool Validate()
@@ -48,20 +54,7 @@ namespace DotNetDynDnsSvc.Server
             // validate that this request is a get request, we only process get requests, all others are forbidden
             if ( _request.ServerVariables.Get("REQUEST_METHOD") != "GET" )
             {
-                _context.Response.Status = "400 Request Type Not Supported";
-                _context.Response.StatusCode = 400;
-                _context.Response.Clear();
-
-                // build the data we want to log and log it
-                LogData log = new LogData();
-                log.responseCode = "400";
-                log.responseString = "Request Type Not Supported";
-
-                LogWriter logWriter = new LogWriter(_request);
-                logWriter.WriteLine(log);
-
-                // end our connection with the browser
-                _context.Response.End();
+                ReturnError(400, "Request Type Not Supported");
                 return false;
             }
 
@@ -78,20 +71,7 @@ namespace DotNetDynDnsSvc.Server
             string authHeader = _request.ServerVariables.Get("HTTP_AUTHORIZATION");
             if (authHeader == null || authHeader == "")
             {
-                _context.Response.Status = "403 Forbidden";
-                _context.Response.StatusCode = 403;
-                _context.Response.Clear();
-                
-                // build the data we want to log and log it
-                LogData log = new LogData();
-                log.responseCode = "403";
-                log.responseString = "Forbidden";
-
-                LogWriter logWriter = new LogWriter(_request);
-                logWriter.WriteLine(log);
-
-                // end our connection with the browser
-                _context.Response.End();
+                ReturnError(403, "Forbidden");
                 return false;
             }
 
@@ -134,20 +114,7 @@ namespace DotNetDynDnsSvc.Server
             // return error 400 bad request and return false if the HTTP request cannot be successfully validated
             if (authError)
             {
-                _context.Response.Status = "400 Bad Request";
-                _context.Response.StatusCode = 400;
-                _context.Response.Clear();
-                
-                // build the data we want to log and log it
-                LogData log = new LogData();
-                log.responseCode = "400";
-                log.responseString = "Bad Request";
-
-                LogWriter logWriter = new LogWriter(_request);
-                logWriter.WriteLine(log);
-
-                // end our connection with the browser
-                _context.Response.End();
+                ReturnError(400, "Bad Request");
                 return false;
             }
 
