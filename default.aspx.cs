@@ -15,20 +15,23 @@ namespace DotNetDynDnsSvc
             manager.Validate();
 
 
-            // just echo out the username and password for now.
+            // try and authenticatethe user. if we can't, error out and end the sesssion
             AuthenticationModel dbAuth = new AuthenticationModel();
             User dbuser = dbAuth.AuthenticateUser(manager.userName, manager.userPassword);
             if (dbuser.isAuthenticated == false)
             {
-                manager.ReturnError(403, "Invalid Username and/or password. Access is denied");
+                manager.ReturnError(403, "Invalid username and/or password. Access is denied");
             }
 
-            Message.Controls.Add(new Literal() { Text = String.Format("<div>Access Granted <br /> User: {0}, Password: {1}</div>", dbuser.username, dbuser.key) });
+            // user is valid, display access granted on page and process DNS update
+            Message.Controls.Add(new Literal() { Text = String.Format("<div>Access Granted <br /> User: {0}</div>", dbuser.username) });
 
-            // build the data we want to log and log it
+            // TODO: update the associated DNS entry for this key.
+
+            // build the data we want to log and log this request
+            // TODO: log the DNS resource record that was updated, and if the update was successful or not.
             LogData log = new LogData();
             log.username = manager.userName;
-            log.password = manager.userPassword;
 
             LogWriter logWriter = new LogWriter(Request);
             logWriter.WriteLine(log);
