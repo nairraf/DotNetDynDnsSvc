@@ -23,8 +23,9 @@ namespace DotNetDynDnsSvc
             }
 
             Crypto crypto = new Crypto();
-            string password = crypto.Encrypt("thisIsMyPassword");
-            string decrypt = crypto.Decrypt("Hq/t1uPd/D6LCJYkb8+1tLHxpcgxHY5q");
+            string password, decrypt = "";
+            password = crypto.BasicEncrypt("thisIsMyPassword");
+            decrypt = crypto.BasicDecrypt(@"KB9UCDV8hwc2TCNl0g+1XEZzPfRWpu69SNkt1/VgaA3");
 
             // user is valid, display access granted on page and process DNS update
             Message.Controls.Add(new Literal() { Text = String.Format("<div>Access Granted <br /> User: {0}<br />{1}<br />{2}</div>", dbuser.username, password, decrypt) });
