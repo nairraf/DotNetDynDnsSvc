@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Management;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace WinDnsRegistration
@@ -36,7 +38,7 @@ namespace WinDnsRegistration
 
             wmiClass.Dispose();
         }
-
+        
         public static void UpdateARecord(string hostName, string zone, string ipAddress, string dnsServerName)
         {
             ConnectionOptions options = new ConnectionOptions();
@@ -64,5 +66,6 @@ namespace WinDnsRegistration
                 }
             }
         }
+
     }
 }

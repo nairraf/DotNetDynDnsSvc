@@ -95,6 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\AuthenticationModel.cs" />
+    <Compile Include="Data\Crypto.cs" />
     <Compile Include="Data\LogData.cs" />
     <Compile Include="Data\User.cs" />
     <Compile Include="Server\httpManager.cs" />
