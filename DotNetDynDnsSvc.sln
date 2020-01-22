@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetDynDnsSvc", "DotNetDy
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinDnsRegistration", "Tools\WinDnsRegistration\WinDnsRegistration.csproj", "{56C12149-78EB-40F8-A354-4C0710844A94}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Farrworks.Crypto", "..\..\Farrworks.Crypto\Farrworks.Crypto\Farrworks.Crypto.csproj", "{4DB66CDA-9CFE-4579-8519-E31AF333A7AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{56C12149-78EB-40F8-A354-4C0710844A94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56C12149-78EB-40F8-A354-4C0710844A94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56C12149-78EB-40F8-A354-4C0710844A94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DB66CDA-9CFE-4579-8519-E31AF333A7AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DB66CDA-9CFE-4579-8519-E31AF333A7AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DB66CDA-9CFE-4579-8519-E31AF333A7AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DB66CDA-9CFE-4579-8519-E31AF333A7AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

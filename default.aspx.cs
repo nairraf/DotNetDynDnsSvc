@@ -1,7 +1,9 @@
 ﻿using DotNetDynDnsSvc.Data;
 using DotNetDynDnsSvc.Server;
+using DotNetDynDnsSvc.Common;
 using System;
 using System.Web.UI.WebControls;
+using Farrworks.Crypto.Basic;
 
 namespace DotNetDynDnsSvc
 {
@@ -22,13 +24,10 @@ namespace DotNetDynDnsSvc
                 manager.ReturnError(403, "Invalid username and/or password. Access is denied");
             }
 
-            Crypto crypto = new Crypto();
-            string password, decrypt = "";
-            password = crypto.BasicEncrypt("thisIsMyPassword");
-            decrypt = crypto.BasicDecrypt(@"KB9UCDV8hwc2TCNl0g+1XEZzPfRWpu69SNkt1/VgaA3");
+            ConfigurationManagerSingleton config = ConfigurationManagerSingleton.Instance;
 
             // user is valid, display access granted on page and process DNS update
-            Message.Controls.Add(new Literal() { Text = String.Format("<div>Access Granted <br /> User: {0}<br />{1}<br />{2}</div>", dbuser.username, password, decrypt) });
+            Message.Controls.Add(new Literal() { Text = String.Format(@"<div>Access Granted <br /> User: {0}<br />{1}</div>", dbuser.username, config.Settings.DnsServer) });
 
             // TODO: update the associated DNS entry for this key.
 

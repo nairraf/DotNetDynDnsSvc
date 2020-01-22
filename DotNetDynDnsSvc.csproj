@@ -77,6 +77,9 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="YamlDotNet, Version=8.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
+      <HintPath>packages\YamlDotNet.8.1.0\lib\net45\YamlDotNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -94,9 +97,10 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\ConfigurationManagerSingleton.cs" />
     <Compile Include="Data\AuthenticationModel.cs" />
-    <Compile Include="Data\Crypto.cs" />
     <Compile Include="Data\LogData.cs" />
+    <Compile Include="Data\Settings.cs" />
     <Compile Include="Data\User.cs" />
     <Compile Include="Server\httpManager.cs" />
     <Compile Include="Server\LogWriter.cs" />
@@ -109,8 +113,12 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Common\" />
+    <ProjectReference Include="..\..\Farrworks.Crypto\Farrworks.Crypto\Farrworks.Crypto.csproj">
+      <Project>{4db66cda-9cfe-4579-8519-e31af333a7ab}</Project>
+      <Name>Farrworks.Crypto</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
