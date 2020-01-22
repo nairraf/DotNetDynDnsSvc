@@ -7,7 +7,7 @@ namespace DotNetDynDnsSvc.Data
 {
     public class Settings
     {
-        public string Key { get; set; }
+        public string InitialSeed { get; set; }
         public string DnsServer { get; set; }
         public string DnsServerUserName { get; set; }
         public string DnsServerUserPasswordCipher { get; set; }
