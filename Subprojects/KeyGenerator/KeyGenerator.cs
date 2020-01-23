@@ -44,7 +44,12 @@ namespace KeyGenerator
                     string second = GetRandomString(r2);
                     string third = GetRandomString(r3);
 
-                    Console.WriteLine(string.Format("New seed value: {0}+{1}/{2}", first, second, third));
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write("New seed value: ");
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine(string.Format("{0}+{1}/{2}", first, second, third));
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
 
                 // generate a new DNS dynamic update key
@@ -52,7 +57,12 @@ namespace KeyGenerator
                 {
                     //we will create a random string of a random lengh and return it
                     Random rand = new Random();
-                    Console.WriteLine(string.Format("New DNS Key: {0}", GetRandomString(rand.Next(72, 128))));
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write("New DNS Key: ");
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine(GetRandomString(rand.Next(72, 128)));
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
         }

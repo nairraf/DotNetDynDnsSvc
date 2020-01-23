@@ -5,11 +5,11 @@ VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetDynDnsSvc", "DotNetDynDnsSvc.csproj", "{818A6D41-8607-4CEC-966F-6448CC9F6B4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinDnsRegistration", "Tools\WinDnsRegistration\WinDnsRegistration.csproj", "{56C12149-78EB-40F8-A354-4C0710844A94}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinDnsRegistration", "Subprojects\WinDnsRegistration\WinDnsRegistration.csproj", "{56C12149-78EB-40F8-A354-4C0710844A94}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Farrworks.Crypto", "..\..\Farrworks.Crypto\Farrworks.Crypto\Farrworks.Crypto.csproj", "{4DB66CDA-9CFE-4579-8519-E31AF333A7AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyGenerator", "Tools\KeyGenerator\KeyGenerator.csproj", "{6C0D4EBC-1466-42BB-A2F3-799EFFD94FF9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyGenerator", "Subprojects\KeyGenerator\KeyGenerator.csproj", "{6C0D4EBC-1466-42BB-A2F3-799EFFD94FF9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
