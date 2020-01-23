@@ -17,7 +17,7 @@ namespace DotNetDynDnsSvc.Server
 
         public User AuthenticateUser(string username, string key)
         {
-            string sql = String.Format("SELECT username,key,resourceRecord,zone FROM users WHERE username = '{0}' and key = '{1}'", username.Trim(), key.Trim());
+            string sql = String.Format("SELECT username,key,resourceRecord,zone,allowedActions FROM users WHERE username = '{0}' and key = '{1}'", username.Trim(), key.Trim());
             var dbConnection = new SQLiteConnection(_dbSource);
             dbConnection.Open();
 
@@ -35,6 +35,7 @@ namespace DotNetDynDnsSvc.Server
                     dbUser.key = sqlReader.GetString(1);
                     dbUser.resourceRecord = sqlReader.GetString(2);
                     dbUser.zone = sqlReader.GetString(3);
+                    dbUser.LoadActions(sqlReader.GetString(4));
                 }
             }
 

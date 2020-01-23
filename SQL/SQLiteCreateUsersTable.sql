@@ -3,5 +3,6 @@
 	"key"	TEXT NOT NULL,
 	"resourceRecord"	TEXT NOT NULL,
 	"zone"	TEXT NOT NULL,
+	"allowedActions"	TEXT NOT NULL,
 	PRIMARY KEY("username","key")
 )

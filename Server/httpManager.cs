@@ -7,7 +7,7 @@ namespace DotNetDynDnsSvc.Server
 {
     public class httpManager
     {
-        private HttpRequest _request;
+        public HttpRequest Request;
         private HttpContext _context;
         private string _userName = "";
         private string _userPassword = "";
@@ -17,9 +17,10 @@ namespace DotNetDynDnsSvc.Server
 
         public httpManager(HttpRequest httpRequest, HttpContext httpContext)
         {
-            _request = httpRequest;
+            Request = httpRequest;
             _context = httpContext;
         }
+
 
         public void ReturnError(int errorCode, string message)
         {
@@ -42,7 +43,7 @@ namespace DotNetDynDnsSvc.Server
                 log.password = _userPassword;
             }
 
-            LogWriter logWriter = new LogWriter(_request);
+            LogWriter logWriter = new LogWriter(Request);
             logWriter.WriteLine(log);
 
             // end our connection with the browser
@@ -52,7 +53,7 @@ namespace DotNetDynDnsSvc.Server
         public bool Validate()
         {
             // validate that this request is a get request, we only process get requests, all others are forbidden
-            if ( _request.ServerVariables.Get("REQUEST_METHOD") != "GET" )
+            if ( Request.ServerVariables.Get("REQUEST_METHOD") != "GET" )
             {
                 ReturnError(400, "Request Type Not Supported");
                 return false;
@@ -68,7 +69,7 @@ namespace DotNetDynDnsSvc.Server
             // return false if not successful for any reason
             // if not successful, return 403 forbidden or 400 bad request if
             // the HTTP request cannot be validated for some reason.
-            string authHeader = _request.ServerVariables.Get("HTTP_AUTHORIZATION");
+            string authHeader = Request.ServerVariables.Get("HTTP_AUTHORIZATION");
             if (authHeader == null || authHeader == "")
             {
                 ReturnError(403, "Forbidden");

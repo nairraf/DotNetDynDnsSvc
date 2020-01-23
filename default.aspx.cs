@@ -24,10 +24,63 @@ namespace DotNetDynDnsSvc
                 manager.ReturnError(403, "Invalid username and/or password. Access is denied");
             }
 
+            // see if we have a query string
+            var QueryStrings = manager.Request.QueryString;
+            string htmlToReturn = "";
+
+            // get our configuration instance
             ConfigurationManagerSingleton config = ConfigurationManagerSingleton.Instance;
 
-            // user is valid, display access granted on page and process DNS update
-            Message.Controls.Add(new Literal() { Text = String.Format(@"<div>Access Granted <br /> User: {0}<br />Config Read Test: {1}</div>", dbuser.username, config.Settings.DnsServer) });
+            if (QueryStrings["action"].ToLower() == "updatedns")
+            {
+                if (!dbuser.IsPermitted("updatedns"))
+                    manager.ReturnError(403, "Access is denied");
+
+                htmlToReturn = String.Format(@"<div>
+                                                Access Granted <br /> 
+                                                User: {0} <br />
+                                                Updated DNS Using IP: {1}
+                                            </div>", 
+                                            dbuser.username, manager.Request.UserHostAddress);
+            }
+
+            if (QueryStrings["action"].ToLower() == "test")
+            {
+                if (!dbuser.IsPermitted("test"))
+                    manager.ReturnError(403, "Access is denied");
+
+                htmlToReturn = String.Format(@"<div>
+                                                Access Granted <br /> 
+                                                User: {0} <br />
+                                                Config Read Test: Dns Server to update: {1}
+                                            </div>",
+                                            dbuser.username, config.Settings.DnsServer);
+            }
+
+            if (QueryStrings["action"].ToLower() == "reloadconfiguration")
+            {
+                if (!dbuser.IsPermitted("reloadconfiguration"))
+                    manager.ReturnError(403, "Access is denied");
+
+                htmlToReturn = String.Format(@"<div>
+                                                Access Granted <br /> 
+                                                User: {0} <br />
+                                                Reloading Configuration.
+                                            </div>",
+                                            dbuser.username);
+
+                config.ReloadConfiguration();
+            }
+
+            if (QueryStrings["action"].ToLower() == "error")
+            {
+                if (!dbuser.IsPermitted("error"))
+                    manager.ReturnError(403, "Access is denied");
+
+                manager.ReturnError(500, "This is a test error");
+            }
+
+            Message.Controls.Add(new Literal() { Text = htmlToReturn });
 
             // TODO: update the associated DNS entry for this key.
 
