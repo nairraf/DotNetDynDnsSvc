@@ -1,12 +1,9 @@
-﻿using DotNetDynDnsSvc.Data;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Web;
+using DotNetDynDnsSvc.Model;
 using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
 
 namespace DotNetDynDnsSvc.Common
 {
@@ -19,7 +16,7 @@ namespace DotNetDynDnsSvc.Common
         private string _configFile;
         private string _yaml;
         private IDeserializer _deserializer;
-        public Settings Settings { get; }
+        public ConfigSettings Settings { get; }
 
         // static property to access the Instance
         public static ConfigurationManagerSingleton Instance
@@ -46,7 +43,7 @@ namespace DotNetDynDnsSvc.Common
             }
             // deserialize our Yaml to our settings object for easy access
             _deserializer = new DeserializerBuilder().Build();
-            Settings = _deserializer.Deserialize<Settings>(_yaml);
+            Settings = _deserializer.Deserialize<ConfigSettings>(_yaml);
         }
     }
 }

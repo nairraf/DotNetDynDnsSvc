@@ -1,4 +1,4 @@
-﻿using DotNetDynDnsSvc.Data;
+﻿using DotNetDynDnsSvc.Model;
 using System;
 using System.IO;
 using System.Threading;

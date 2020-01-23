@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using DotNetDynDnsSvc.Model;
+using System;
 using System.Data.SQLite;
 using System.IO;
+using System.Web;
 
-namespace DotNetDynDnsSvc.Data
+namespace DotNetDynDnsSvc.Server
 {
-    public class AuthenticationModel
+    public class AuthenticationManager
     {
         private string _dbSource;
 
-        public AuthenticationModel()
+        public AuthenticationManager()
         {
             _dbSource = String.Format(@"URI=file:{0}\auth.db", Path.GetFullPath(Path.Combine(HttpRuntime.AppDomainAppPath, @"..\DB")));
         }

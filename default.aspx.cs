@@ -1,4 +1,4 @@
-﻿using DotNetDynDnsSvc.Data;
+﻿using DotNetDynDnsSvc.Model;
 using DotNetDynDnsSvc.Server;
 using DotNetDynDnsSvc.Common;
 using System;
@@ -17,7 +17,7 @@ namespace DotNetDynDnsSvc
             manager.Validate();
 
             // try and authenticatethe user. if we can't, error out and end the sesssion
-            AuthenticationModel dbAuth = new AuthenticationModel();
+            AuthenticationManager dbAuth = new AuthenticationManager();
             User dbuser = dbAuth.AuthenticateUser(manager.userName, manager.userPassword);
             if (dbuser.isAuthenticated == false)
             {

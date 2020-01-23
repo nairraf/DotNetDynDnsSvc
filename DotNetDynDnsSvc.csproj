@@ -98,10 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\ConfigurationManagerSingleton.cs" />
-    <Compile Include="Data\AuthenticationModel.cs" />
-    <Compile Include="Data\LogData.cs" />
-    <Compile Include="Data\Settings.cs" />
-    <Compile Include="Data\User.cs" />
+    <Compile Include="Server\AuthenticationManager.cs" />
     <Compile Include="Server\httpManager.cs" />
     <Compile Include="Server\LogWriter.cs" />
     <Compile Include="default.aspx.cs">
@@ -118,6 +115,10 @@
     <ProjectReference Include="..\..\Farrworks.Crypto\Farrworks.Crypto\Farrworks.Crypto.csproj">
       <Project>{4db66cda-9cfe-4579-8519-e31af333a7ab}</Project>
       <Name>Farrworks.Crypto</Name>
+    </ProjectReference>
+    <ProjectReference Include="Subprojects\DotNetDynDnsSvc.Model\DotNetDynDnsSvc.Model.csproj">
+      <Project>{7b5e5fd6-13a0-40c8-880b-ac7dbb9b7a48}</Project>
+      <Name>DotNetDynDnsSvc.Model</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

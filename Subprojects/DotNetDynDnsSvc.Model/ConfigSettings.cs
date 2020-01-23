@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.Text;
 
-namespace DotNetDynDnsSvc.Data
+namespace DotNetDynDnsSvc.Model
 {
-    public class Settings
+    public class ConfigSettings
     {
         public string InitialSeed { get; set; }
         public string DnsServer { get; set; }

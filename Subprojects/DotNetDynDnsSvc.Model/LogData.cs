@@ -1,4 +1,4 @@
-﻿namespace DotNetDynDnsSvc.Data
+﻿namespace DotNetDynDnsSvc.Model
 {
     public class LogData
     {
