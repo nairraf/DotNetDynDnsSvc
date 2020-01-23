@@ -4,6 +4,7 @@ using System.Text;
 using System.Web;
 using DotNetDynDnsSvc.Model;
 using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace DotNetDynDnsSvc.Common
 {
@@ -13,10 +14,10 @@ namespace DotNetDynDnsSvc.Common
         private static readonly ConfigurationManagerSingleton _instance = new ConfigurationManagerSingleton();
 
         // properties and fields for our yaml needs
-        private string _configFile;
-        private string _yaml;
-        private IDeserializer _deserializer;
-        public ConfigSettings Settings { get; }
+        public string ConfigFilePath { get; private set; }
+        public string Yaml { get; private set; }
+
+        public ConfigSettings Settings { get; private set; }
 
         // static property to access the Instance
         public static ConfigurationManagerSingleton Instance
@@ -32,18 +33,24 @@ namespace DotNetDynDnsSvc.Common
         // until the app pool is restarted, and then it re-loads.
         private ConfigurationManagerSingleton()
         {
-            _configFile = String.Format(@"{0}\configuration.yaml", Path.GetFullPath(Path.Combine(HttpRuntime.AppDomainAppPath, @"..\Conf")));
-            // read the yaml file without locking
-            using (System.IO.FileStream fs = System.IO.File.Open(_configFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            ConfigFilePath = String.Format(@"{0}\configuration.yaml", Path.GetFullPath(Path.Combine(HttpRuntime.AppDomainAppPath, @"..\Conf")));
+            if (!File.Exists(ConfigFilePath))
+                throw new Exception("YAML Config File Not Found");
+            ReloadConfiguration();
+        }
+
+        public void ReloadConfiguration()
+        {
+            using (System.IO.FileStream fs = System.IO.File.Open(ConfigFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
                 byte[] bytes = new byte[fs.Length];
                 int bytesToRead = (int)fs.Length;
                 fs.Read(bytes, 0, bytesToRead);
-                _yaml = Encoding.UTF8.GetString(bytes);
+                Yaml = Encoding.UTF8.GetString(bytes);
             }
             // deserialize our Yaml to our settings object for easy access
-            _deserializer = new DeserializerBuilder().Build();
-            Settings = _deserializer.Deserialize<ConfigSettings>(_yaml);
+            var deserializer = new DeserializerBuilder().WithNamingConvention(PascalCaseNamingConvention.Instance).Build();
+            Settings = deserializer.Deserialize<ConfigSettings>(Yaml);
         }
     }
 }

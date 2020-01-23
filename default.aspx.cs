@@ -27,7 +27,7 @@ namespace DotNetDynDnsSvc
             ConfigurationManagerSingleton config = ConfigurationManagerSingleton.Instance;
 
             // user is valid, display access granted on page and process DNS update
-            Message.Controls.Add(new Literal() { Text = String.Format(@"<div>Access Granted <br /> User: {0}<br />{1}</div>", dbuser.username, config.Settings.DnsServer) });
+            Message.Controls.Add(new Literal() { Text = String.Format(@"<div>Access Granted <br /> User: {0}<br />Config Read Test: {1}</div>", dbuser.username, config.Settings.DnsServer) });
 
             // TODO: update the associated DNS entry for this key.
 
