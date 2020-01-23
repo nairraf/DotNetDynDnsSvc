@@ -63,16 +63,16 @@ namespace DotNetDynDnsSvc.Server
         public void WriteLine(LogData logData)
         {
             // we want the log line to look like:
-            //      dateTimeStamp,RemoteAddress,RemoteHost,ServerProtocol,RequestMethod,HttpUserAgent,url,querystring,responseCode,responseString,username,password
+            //      dateTimeStamp,RemoteAddress,RemoteHost,ServerProtocol,RequestMethod,HttpUserAgent,url,querystring,responseCode,responseString,username
 
-            string logline = String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", 
+            string logline = String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10}", 
                             dateTimeStamp, _remoteAddress, _remoteHost, _serverProtocol, _requestMethod, _httpUserAgent, _url, _queryString, 
-                            logData.responseCode, logData.responseString ,logData.username, logData.password );
+                            logData.responseCode, logData.responseString ,logData.username );
             
             // see if the file exists, if it doesn't exist, create it and fill it with the csv header line
             if (File.Exists(_logFileName) == false)
             {
-                DoWrite("dateTimeStamp,remoteAddress,remoteHost,serverProtocol,requestMethod,httpUserAgent,url,querstring,responseCode,responseString,username,password");
+                DoWrite("dateTimeStamp,remoteAddress,remoteHost,serverProtocol,requestMethod,httpUserAgent,url,querstring,responseCode,responseString,username");
             }
 
             //write the new log entry

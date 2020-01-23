@@ -72,9 +72,9 @@ namespace DotNetDynDnsSvc
                 config.ReloadConfiguration();
             }
 
-            if (QueryStrings["action"].ToLower() == "error")
+            if (QueryStrings["action"].ToLower() == "testerror")
             {
-                if (!dbuser.IsPermitted("error"))
+                if (!dbuser.IsPermitted("testerror"))
                     manager.ReturnError(403, "Access is denied");
 
                 manager.ReturnError(500, "This is a test error");
