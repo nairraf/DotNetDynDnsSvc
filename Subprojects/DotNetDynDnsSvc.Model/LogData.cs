@@ -9,6 +9,7 @@
         public string responseString { get; set; }
         public string dnsRecord { get; set; }
         public string dnsZone { get; set; }
+        public string dnsUpdateStatus { get; set; }
 
         public LogData()
         {
@@ -16,6 +17,9 @@
             responseString = "OK";
             username = "";
             password = "";
+            dnsRecord = "";
+            dnsZone = "";
+            dnsUpdateStatus = "N/A";
         }
     }
 }

@@ -52,7 +52,7 @@ namespace DotNetDynDnsSvc.Server
 
         public void UpdateTime()
         {
-            DateTime _now = DateTime.Now;
+            _now = DateTime.Now;
             string day = (_now.Day).ToString();
             string month = (_now.Month).ToString();
             string year = (_now.Year).ToString();
@@ -71,14 +71,14 @@ namespace DotNetDynDnsSvc.Server
             // we want the log line to look like:
             //      dateTimeStamp,RemoteAddress,RemoteHost,ServerProtocol,RequestMethod,HttpUserAgent,url,querystring,responseCode,responseString,username
 
-            string logline = String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12}", 
+            string logline = String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13}", 
                             dateTimeStamp, _remoteAddress, _x_forwarded_for, _remoteHost, _serverProtocol, _requestMethod, _httpUserAgent, _url, _queryString, 
-                            logData.responseCode, logData.responseString ,logData.username, string.Format("{0}.{1}", logData.dnsRecord, logData.dnsZone));
+                            logData.responseCode, logData.responseString ,logData.username, string.Format("{0}.{1}", logData.dnsRecord, logData.dnsZone), logData.dnsUpdateStatus);
             
             // see if the file exists, if it doesn't exist, create it and fill it with the csv header line
             if (File.Exists(_logFileName) == false)
             {
-                DoWrite("dateTimeStamp,remoteAddress,x-forwarded-for,remoteHost,serverProtocol,requestMethod,httpUserAgent,url,querstring,responseCode,responseString,username,dnsRecord");
+                DoWrite("dateTimeStamp,remoteAddress,x-forwarded-for,remoteHost,serverProtocol,requestMethod,httpUserAgent,url,querstring,responseCode,responseString,username,dnsRecord,dnsUpdateStatus");
             }
 
             //write the new log entry

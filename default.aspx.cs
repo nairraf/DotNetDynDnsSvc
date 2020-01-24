@@ -41,6 +41,8 @@ namespace DotNetDynDnsSvc
                 if (!dbuser.IsPermitted("updatedns"))
                     manager.ReturnError(403, "Access is denied");
 
+                string ipAddress;
+
                 if (manager.Request.ServerVariables.Get("HTTP_X_FORWARDED_FOR") != null && manager.Request.ServerVariables.Get("HTTP_X_FORWARDED_FOR").Length >0)
                 {
                     // X_FORWARDED_FOR detected - using that as real client IP
@@ -52,7 +54,7 @@ namespace DotNetDynDnsSvc
                                                 </div>", 
                                                 dbuser.username, String.Format("{0}.{1}", dbuser.resourceRecord, dbuser.zone) ,manager.Request.ServerVariables.Get("HTTP_X_FORWARDED_FOR"));
 
-                    string ipAddress = manager.Request.ServerVariables.Get("HTTP_X_FORWARDED_FOR");
+                    ipAddress = manager.Request.ServerVariables.Get("HTTP_X_FORWARDED_FOR");
                 }
                 else
                 {
@@ -63,15 +65,35 @@ namespace DotNetDynDnsSvc
                                                 </div>",
                                                 dbuser.username, String.Format("{0}.{1}", dbuser.resourceRecord, dbuser.zone), manager.Request.UserHostAddress);
 
-                    string ipAddress = manager.Request.UserHostAddress;
+                    ipAddress = manager.Request.UserHostAddress;
                 }
 
                 // log that we are trying to update a dns record
                 log.dnsRecord = dbuser.resourceRecord;
                 log.dnsZone = dbuser.zone;
 
-                // try to update the DNS record using ipAddress
+                // try to update the DNS record using ipAddress if it isn't current
+                DnsUpdateManager dnsUpdater = new DnsUpdateManager(ipAddress);
+                if (!dnsUpdater.DnsRecordIsCurrent(dnsUpdater.GetDnsEntry(dbuser.resourceRecord, dbuser.zone)))
+                {
+                    bool dnsUpdatedSuccessfully = dnsUpdater.UpdateDnsEntry(dbuser.resourceRecord, dbuser.zone);
+                    
+                    if (!dnsUpdatedSuccessfully)
+                        manager.ReturnError(500, string.Format("Error Updating DNS entry. DNS Update failed for {0}.{1}", dbuser.resourceRecord, dbuser.zone));
 
+                    log.dnsUpdateStatus = string.Format("DNS Updated with IP: {0}", ipAddress);
+                } 
+                else
+                {
+                    htmlToReturn = String.Format(@"<div>
+                                                    Access Granted <br /> 
+                                                    User: {0} <br />
+                                                    DNS Record: {1} does not require updating. Already using IP: {2}<br />
+                                                </div>",
+                                                dbuser.username, String.Format("{0}.{1}", dbuser.resourceRecord, dbuser.zone), ipAddress);
+
+                    log.dnsUpdateStatus = string.Format("No Dns Update IP Is Current: {0}", ipAddress);
+                }
             }
 
             if (QueryStrings["action"].ToLower() == "test")

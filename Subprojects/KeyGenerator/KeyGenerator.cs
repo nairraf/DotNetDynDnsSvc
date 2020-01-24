@@ -24,7 +24,6 @@ namespace KeyGenerator
                             if (arguments.ContainsKey(split[0]))
                             {
                                 PrintHelp();
-                                Environment.Exit(1);
                             }
 
                             arguments.Add(split[0].ToLower(), split[1].ToLower());
@@ -154,6 +153,45 @@ namespace KeyGenerator
                     PrintHelp();
                 }
             }
+
+            if (arguments.ContainsKey("rand"))
+            {
+                Console.WriteLine();
+
+                if (arguments["rand"].Contains(','))
+                {
+                    string[] values = arguments["rand"].Split(',');
+                    if ( values.Count() != 2)
+                        PrintHelp();
+
+                    int length = 0, count = 0;
+                    try
+                    {
+                        length = Convert.ToInt32(values[0]);
+                        count = Convert.ToInt32(values[1]);
+                    }
+                    catch
+                    {
+                        PrintHelp();
+                    }
+
+                    if (count <= 0 || length <= 0)
+                        PrintHelp();
+
+                    for (int i = 0; i < count; i++)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine(GetRandomString(length));   
+                    }
+
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine();
+                }
+                else
+                {
+                    PrintHelp();
+                }
+            }
         }
 
         static void PrintHelp()
@@ -186,10 +224,15 @@ namespace KeyGenerator
         type=seed               Generate a new DotNetDynDnsSvc encryption seed
                                 Only a single type= argument can be used at a time
 
+        rand=<length>,<count>   Generates random strings
+                                <length> is the length of each random string
+                                <count> is how many random string should be created
+
 ";
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine(helpText);
             Console.ForegroundColor = ConsoleColor.White;
+            Environment.Exit(1);
         }
 
         static string GetRandomString(int length)
@@ -202,7 +245,6 @@ namespace KeyGenerator
             string ret = "";
             string previous = "";
             string current = "";
-            bool fairRole;
             bool reRole;
             // our sliding window to look for duplicates
             int window = 10;
@@ -211,8 +253,7 @@ namespace KeyGenerator
                 current = "";
                 do
                 {
-                    // assume a fair role and no re-roll
-                    fairRole = true;
+                    // assume a no re-roll
                     reRole = false;
 
                     // produces a random single byte representing numbers from 0-255.
@@ -233,22 +274,25 @@ namespace KeyGenerator
                     // not a fairRole - re-roll
                     if (roll >= 248 && roll <= 255)
                     {
-                        fairRole = false;
                         reRole = true;
                         continue;
                     }
 
                     // assign our current character
                     current = characters[roll].ToString();
-                    
+
+                    // make sure we don't have any repetition within our window
+                    if (previous.ToLower().Contains(current.ToLower()))
+                    {
+                        reRole = true;
+                        continue;
+                    }
+
                     // drop off the first character (the oldest) from the string
                     // until the string is the smaller than our window
                     while (previous.Length >= window)
                         previous = previous.Substring(1);
 
-                    // make sure we don't have any repetition within our window
-                    if (previous.ToLower().Contains(current.ToLower()))
-                        reRole = true;
                 } while (reRole == true);
 
                 // add the new character to our string, and append current to previous to make sure we don't duplicate characters within our window
