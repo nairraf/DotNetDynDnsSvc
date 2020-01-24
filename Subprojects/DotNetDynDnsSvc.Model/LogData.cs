@@ -7,6 +7,8 @@
         public string password { get; set; }
         public string responseCode { get; set; }
         public string responseString { get; set; }
+        public string dnsRecord { get; set; }
+        public string dnsZone { get; set; }
 
         public LogData()
         {

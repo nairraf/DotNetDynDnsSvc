@@ -6,7 +6,7 @@ using DotNetDynDnsSvc.Model;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-namespace DotNetDynDnsSvc.Common
+namespace DotNetDynDnsSvc.Server
 {
     public sealed class ConfigurationManagerSingleton
     {

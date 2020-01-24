@@ -1,9 +1,7 @@
 ﻿using DotNetDynDnsSvc.Model;
 using DotNetDynDnsSvc.Server;
-using DotNetDynDnsSvc.Common;
 using System;
 using System.Web.UI.WebControls;
-using Farrworks.Crypto.Basic;
 
 namespace DotNetDynDnsSvc
 {
@@ -24,6 +22,13 @@ namespace DotNetDynDnsSvc
                 manager.ReturnError(403, "Invalid username and/or password. Access is denied");
             }
 
+            // user is now authenticated (valid user/key combo)
+
+            // build the data we want to log and log this request
+            // TODO: log the DNS resource record that was updated, and if the update was successful or not.
+            LogData log = new LogData();
+            log.username = manager.userName;
+
             // see if we have a query string
             var QueryStrings = manager.Request.QueryString;
             string htmlToReturn = "";
@@ -36,12 +41,37 @@ namespace DotNetDynDnsSvc
                 if (!dbuser.IsPermitted("updatedns"))
                     manager.ReturnError(403, "Access is denied");
 
-                htmlToReturn = String.Format(@"<div>
-                                                Access Granted <br /> 
-                                                User: {0} <br />
-                                                Updated DNS Using IP: {1}
-                                            </div>", 
-                                            dbuser.username, manager.Request.UserHostAddress);
+                if (manager.Request.ServerVariables.Get("HTTP_X_FORWARDED_FOR") != null && manager.Request.ServerVariables.Get("HTTP_X_FORWARDED_FOR").Length >0)
+                {
+                    // X_FORWARDED_FOR detected - using that as real client IP
+
+                    htmlToReturn = String.Format(@"<div>
+                                                    Access Granted <br /> 
+                                                    User: {0} <br />
+                                                    Updated DNS Record: {1} Using X-FORWARDED-FOR: {2}<br />
+                                                </div>", 
+                                                dbuser.username, String.Format("{0}.{1}", dbuser.resourceRecord, dbuser.zone) ,manager.Request.ServerVariables.Get("HTTP_X_FORWARDED_FOR"));
+
+                    string ipAddress = manager.Request.ServerVariables.Get("HTTP_X_FORWARDED_FOR");
+                }
+                else
+                {
+                    htmlToReturn = String.Format(@"<div>
+                                                    Access Granted <br /> 
+                                                    User: {0} <br />
+                                                    Updated DNS Record: {1} Using IP: {2}<br />
+                                                </div>",
+                                                dbuser.username, String.Format("{0}.{1}", dbuser.resourceRecord, dbuser.zone), manager.Request.UserHostAddress);
+
+                    string ipAddress = manager.Request.UserHostAddress;
+                }
+
+                // log that we are trying to update a dns record
+                log.dnsRecord = dbuser.resourceRecord;
+                log.dnsZone = dbuser.zone;
+
+                // try to update the DNS record using ipAddress
+
             }
 
             if (QueryStrings["action"].ToLower() == "test")
@@ -84,10 +114,7 @@ namespace DotNetDynDnsSvc
 
             // TODO: update the associated DNS entry for this key.
 
-            // build the data we want to log and log this request
-            // TODO: log the DNS resource record that was updated, and if the update was successful or not.
-            LogData log = new LogData();
-            log.username = manager.userName;
+            
 
             LogWriter logWriter = new LogWriter(Request);
             logWriter.WriteLine(log);

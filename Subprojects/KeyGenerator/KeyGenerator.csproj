@@ -41,13 +41,32 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="YamlDotNet, Version=8.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\YamlDotNet.8.1.0\lib\net45\YamlDotNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigManager.cs" />
     <Compile Include="KeyGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Farrworks.Crypto\Farrworks.Crypto\Farrworks.Crypto.csproj">
+      <Project>{4db66cda-9cfe-4579-8519-e31af333a7ab}</Project>
+      <Name>Farrworks.Crypto</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DotNetDynDnsSvc.Common\DotNetDynDnsSvc.Common.csproj">
+      <Project>{7947c4d3-6608-43f3-83ac-75bb435edcee}</Project>
+      <Name>DotNetDynDnsSvc.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DotNetDynDnsSvc.Model\DotNetDynDnsSvc.Model.csproj">
+      <Project>{7b5e5fd6-13a0-40c8-880b-ac7dbb9b7a48}</Project>
+      <Name>DotNetDynDnsSvc.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

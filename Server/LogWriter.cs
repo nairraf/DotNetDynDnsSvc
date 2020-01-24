@@ -23,6 +23,7 @@ namespace DotNetDynDnsSvc.Server
         private string _queryString;
         private string _url;
         private string _serverProtocol;
+        private string _x_forwarded_for;
         private DateTime _now;
         
 
@@ -42,6 +43,11 @@ namespace DotNetDynDnsSvc.Server
             _queryString = _httpRequest.ServerVariables.Get("QUERY_STRING");
             _url = _httpRequest.ServerVariables.Get("URL");
             _serverProtocol = _httpRequest.ServerVariables.Get("SERVER_PROTOCOL");
+            if (_httpRequest.ServerVariables.Get("HTTP_X_FORWARDED_FOR") != null && _httpRequest.ServerVariables.Get("HTTP_X_FORWARDED_FOR").Length > 0)
+                _x_forwarded_for = _httpRequest.ServerVariables.Get("HTTP_X_FORWARDED_FOR");
+            else
+                _x_forwarded_for = "";
+
         }
 
         public void UpdateTime()
@@ -65,14 +71,14 @@ namespace DotNetDynDnsSvc.Server
             // we want the log line to look like:
             //      dateTimeStamp,RemoteAddress,RemoteHost,ServerProtocol,RequestMethod,HttpUserAgent,url,querystring,responseCode,responseString,username
 
-            string logline = String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10}", 
-                            dateTimeStamp, _remoteAddress, _remoteHost, _serverProtocol, _requestMethod, _httpUserAgent, _url, _queryString, 
-                            logData.responseCode, logData.responseString ,logData.username );
+            string logline = String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12}", 
+                            dateTimeStamp, _remoteAddress, _x_forwarded_for, _remoteHost, _serverProtocol, _requestMethod, _httpUserAgent, _url, _queryString, 
+                            logData.responseCode, logData.responseString ,logData.username, string.Format("{0}.{1}", logData.dnsRecord, logData.dnsZone));
             
             // see if the file exists, if it doesn't exist, create it and fill it with the csv header line
             if (File.Exists(_logFileName) == false)
             {
-                DoWrite("dateTimeStamp,remoteAddress,remoteHost,serverProtocol,requestMethod,httpUserAgent,url,querstring,responseCode,responseString,username");
+                DoWrite("dateTimeStamp,remoteAddress,x-forwarded-for,remoteHost,serverProtocol,requestMethod,httpUserAgent,url,querstring,responseCode,responseString,username,dnsRecord");
             }
 
             //write the new log entry
