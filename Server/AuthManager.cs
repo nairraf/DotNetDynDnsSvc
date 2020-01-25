@@ -6,11 +6,11 @@ using System.Web;
 
 namespace DotNetDynDnsSvc.Server
 {
-    public class AuthenticationManager
+    public class AuthManager
     {
         private string _dbPath;
 
-        public AuthenticationManager()
+        public AuthManager()
         {
             _dbPath = String.Format(@"{0}\auth.db", Path.GetFullPath(Path.Combine(HttpRuntime.AppDomainAppPath, @"..\DB")));
         }

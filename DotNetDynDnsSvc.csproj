@@ -105,7 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Server\ConfigurationManagerSingleton.cs" />
-    <Compile Include="Server\AuthenticationManager.cs" />
+    <Compile Include="Server\AuthManager.cs" />
     <Compile Include="Server\DnsUpdateManager.cs" />
     <Compile Include="Server\httpManager.cs" />
     <Compile Include="Server\LogWriter.cs" />
