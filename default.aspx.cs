@@ -109,12 +109,25 @@ namespace DotNetDynDnsSvc
                 if (!dbuser.IsPermitted("test"))
                     manager.ReturnError(403, "Access is denied");
 
+                string htmlHeaders = "";
+                int rows = 0;
+                foreach (var header in manager.Request.ServerVariables)
+                {
+                    string css = "";
+                    if (rows % 2 != 0)
+                        css = "class='alt'";
+
+                    htmlHeaders += string.Format("<tr {0}><td>{1}</td><td>{2}</td></tr>", css, header, manager.Request.ServerVariables.Get(header.ToString()));
+                    rows++;
+                }
+                
                 htmlToReturn = String.Format(@"<div>
                                                 Access Granted <br /> 
                                                 User: {0} <br />
                                                 Config Read Test: Dns Server to update: {1}
-                                            </div>",
-                                            dbuser.username, config.Settings.DnsServer);
+                                            </div>
+                                            <table><tr><th>Header</th><th>value</th>{2}</table>",
+                                            dbuser.username, config.Settings.DnsServer, htmlHeaders);
             }
 
             if (QueryStrings["action"].ToLower() == "reloadconfiguration")
