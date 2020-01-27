@@ -81,6 +81,11 @@ namespace KeyGenerator
                     Console.WriteLine(GetRandomString(rand.Next(48, 96)));
                     Console.ForegroundColor = ConsoleColor.White;
                 }
+
+                if ( arguments["type"] == "certificate" )
+                {
+
+                }
             }
 
             if (arguments.ContainsKey("decrypt"))
@@ -88,7 +93,10 @@ namespace KeyGenerator
                 if (arguments.ContainsKey("config"))
                 {
                     if (!File.Exists(arguments["config"]))
-                        throw new Exception("Invalid Config File");
+                        PrintHelp();
+
+                    if (!arguments.ContainsKey("force"))
+                        PrintHelp();
 
                     ConfigManager cfg = new ConfigManager(arguments["config"]);
 
@@ -118,7 +126,7 @@ namespace KeyGenerator
                 if (arguments.ContainsKey("config"))
                 {
                     if (!File.Exists(arguments["config"]))
-                        throw new Exception("Invalid Config File");
+                        PrintHelp();
 
                     ConfigManager cfg = new ConfigManager(arguments["config"]);
 
@@ -206,11 +214,7 @@ namespace KeyGenerator
 
         config=<path>           the path to a DotNetDynDnsSvc Yaml config file
 
-        decrypt                 decrypt some text. you will be prompted for the
-                                cipherText to decrypt.
-                                you must specify a config file (see configuration)
-
-        enrypt                  encrypt some text. you will be prompted for the
+        encrypt                  encrypt some text. you will be prompted for the
                                 text to encrypt.
                                 you must specify a config file (see config=<path>)
 
