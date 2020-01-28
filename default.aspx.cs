@@ -34,9 +34,14 @@ namespace DotNetDynDnsSvc
             var QueryStrings = manager.Request.QueryString;
             string htmlToReturn = "";
 
+            // make sure we have some query strings
+            if (QueryStrings.Count <= 0 || QueryStrings["action"] == null)
+                manager.ReturnError(500, "Invalid Query String");
+
             // get our configuration instance
             ConfigurationManagerSingleton config = ConfigurationManagerSingleton.Instance;
 
+            // parse our query Strings to see what we should do
             if (QueryStrings["action"].ToLower() == "updatedns")
             {
                 if (!dbuser.IsPermitted("updatedns"))

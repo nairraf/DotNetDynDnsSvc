@@ -93,7 +93,7 @@ namespace DotNetDynDnsSvc.Common
 
                 privateCert = Convert.ToBase64String(privateCertRawBytes);
             }
-            catch
+            catch (Exception e)
             {
                 throw new Exception(string.Format("Error Loading Private Key From Cert: {0}", CertSubjectName));
             }

@@ -78,7 +78,7 @@ namespace DotNetDynDnsSvc.Server
                 // check with DNS server if the update succedded
                 updatedSuccessfully = DnsRecordIsCurrent(GetDnsEntry(ARecord, zone));
             }
-            catch 
+            catch (Exception e)
             {
                 updatedSuccessfully = false;
             }
