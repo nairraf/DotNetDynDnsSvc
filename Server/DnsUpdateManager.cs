@@ -27,7 +27,25 @@ namespace DotNetDynDnsSvc.Server
             try
             {
                 // get our encryption manager to help us decrypt the cipherText
-                EncryptionManager ekm = new EncryptionManager(Crypto.GenerateSeed(_config.Settings.InitialSeed));
+                string seed;
+                if (_config.Settings.InitialSeed.Contains("Cert="))
+                {
+                    string[] initialSeedSplit = _config.Settings.InitialSeed.Split('=');
+                    
+                    if (initialSeedSplit.Count() != 2)
+                        return false;
+
+                    seed = Crypto.GetSeedFromCert(initialSeedSplit[1]);
+                }
+                else
+                {
+                    if (_config.Settings.InitialSeed.Length <= 0)
+                        return false;
+                    
+                    seed = Crypto.GenerateSeed(_config.Settings.InitialSeed);
+                }
+
+                EncryptionManager ekm = new EncryptionManager(seed);
 
                 ConnectionOptions options = new ConnectionOptions();
                 options.Username = _config.Settings.DnsServerUserName;

@@ -90,75 +90,96 @@ namespace KeyGenerator
 
             if (arguments.ContainsKey("decrypt"))
             {
-                if (arguments.ContainsKey("config"))
-                {
-                    if (!File.Exists(arguments["config"]))
-                        PrintHelp();
-
-                    if (!arguments.ContainsKey("force"))
-                        PrintHelp();
-
-                    ConfigManager cfg = new ConfigManager(arguments["config"]);
-
-                    if (cfg.Settings.InitialSeed != null && cfg.Settings.InitialSeed != "")
-                    {
-                        EncryptionManager ekm = new EncryptionManager(Crypto.GenerateSeed(cfg.Settings.InitialSeed));
-                        Console.WriteLine();
-                        Console.ForegroundColor = ConsoleColor.Blue;
-                        Console.WriteLine("Decrypt Mode");
-                        Console.ForegroundColor = ConsoleColor.White;
-                        Console.Write("Enter CipherText to Decrypt: ");
-                        string cipherText = Console.ReadLine();
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine(string.Format("    {0}", ekm.Decrypt(cipherText)));
-                        Console.ForegroundColor = ConsoleColor.White;
-                        Console.WriteLine();
-                    }
-                }
-                else
-                {
+                if (!arguments.ContainsKey("config"))
                     PrintHelp();
+
+                if (!File.Exists(arguments["config"]))
+                    PrintHelp();
+
+                if (!arguments.ContainsKey("force"))
+                    PrintHelp();
+
+                ConfigManager cfg = new ConfigManager(arguments["config"]);
+
+                if (cfg.Settings.InitialSeed != null && cfg.Settings.InitialSeed != "")
+                {
+                    string seed;
+                    if (cfg.Settings.InitialSeed.Contains("Cert="))
+                    {
+                        string[] initialSeedSplit = cfg.Settings.InitialSeed.Split('=');
+                        if (initialSeedSplit.Count() != 2)
+                            PrintHelp();
+
+                        seed = Crypto.GetSeedFromCert(initialSeedSplit[1]);
+                    }
+                    else
+                    {
+                        seed = Crypto.GenerateSeed(cfg.Settings.InitialSeed);
+                    }
+
+
+                    EncryptionManager ekm = new EncryptionManager(seed);
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine("Decrypt Mode");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.Write("Enter CipherText to Decrypt: ");
+                    string cipherText = Console.ReadLine();
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine(string.Format("    {0}", ekm.Decrypt(cipherText)));
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine();
                 }
             }
 
             if (arguments.ContainsKey("encrypt"))
             {
-                if (arguments.ContainsKey("config"))
-                {
-                    if (!File.Exists(arguments["config"]))
-                        PrintHelp();
-
-                    ConfigManager cfg = new ConfigManager(arguments["config"]);
-
-                    if (cfg.Settings.InitialSeed != null && cfg.Settings.InitialSeed != "" )
-                    {
-                        EncryptionManager ekm = new EncryptionManager(Crypto.GenerateSeed(cfg.Settings.InitialSeed));
-                        if (arguments["encrypt"].Length == 0)
-                        {
-                            Console.WriteLine();
-                            Console.ForegroundColor = ConsoleColor.Blue;
-                            Console.WriteLine("Encrypt Mode");
-                            Console.ForegroundColor = ConsoleColor.White;
-                            Console.Write("Enter Text to Encrypt: ");
-                            string toEncrypt = Console.ReadLine();
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine(string.Format("    {0}", ekm.Encrypt(toEncrypt)));
-                            Console.ForegroundColor = ConsoleColor.White;
-                            Console.WriteLine();
-                        }
-                        else
-                        {
-                            Console.WriteLine("Encrypting: {0}", arguments["encrypt"]);
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine(string.Format("    {0}", ekm.Encrypt(arguments["encrypt"])));
-                            Console.ForegroundColor = ConsoleColor.White;
-                            Console.WriteLine();
-                        }
-                    }
-                }
-                else
-                {
+                if (!arguments.ContainsKey("config"))
                     PrintHelp();
+
+                if (!File.Exists(arguments["config"]))
+                    PrintHelp();
+
+                ConfigManager cfg = new ConfigManager(arguments["config"]);
+
+                if (cfg.Settings.InitialSeed != null && cfg.Settings.InitialSeed != "" )
+                {
+                    string seed = "";
+                    if (cfg.Settings.InitialSeed.Contains("Cert=") )
+                    {
+                        string[] initialSeedSplit = cfg.Settings.InitialSeed.Split('=');
+                        if (initialSeedSplit.Count() != 2)
+                            PrintHelp();
+
+                        seed = Crypto.GetSeedFromCert(initialSeedSplit[1]);
+                    }
+                    else
+                    {
+                        seed = Crypto.GenerateSeed(cfg.Settings.InitialSeed);
+                    }
+
+                    EncryptionManager ekm = new EncryptionManager(seed);
+                    if (arguments["encrypt"].Length == 0)
+                    {
+                        Console.WriteLine();
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.WriteLine("Encrypt Mode");
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.Write("Enter Text to Encrypt: ");
+                        string toEncrypt = Console.ReadLine();
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine(string.Format("    {0}", ekm.Encrypt(toEncrypt)));
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.WriteLine();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Encrypting: {0}", arguments["encrypt"]);
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine(string.Format("    {0}", ekm.Encrypt(arguments["encrypt"])));
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.WriteLine();
+                    }
                 }
             }
 

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Org.BouncyCastle.Crypto.Parameters;
+using System;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace DotNetDynDnsSvc.Common
@@ -36,6 +38,67 @@ namespace DotNetDynDnsSvc.Common
             part2.CopyTo(seedBytes, part4.Length);
 
             return Convert.ToBase64String(seedBytes);
+        }
+
+        public static string GetSeedFromCert(string CertSubjectName)
+        {
+            X509Store store = new X509Store(StoreLocation.LocalMachine);
+            store.Open(OpenFlags.ReadOnly);
+            X509Certificate2Collection certs = store.Certificates.Find(X509FindType.FindBySubjectName, CertSubjectName, false);
+            X509Certificate2 cer;
+            string privateCert = "";
+
+            if (certs.Count <= 0)
+                throw new Exception(String.Format("Unable To Find Cert: {0}", CertSubjectName));
+
+            cer = certs[0];
+            try
+            {
+                RSACryptoServiceProvider rsa = cer.PrivateKey as RSACryptoServiceProvider;
+                RSAParameters rSAParameters = rsa.ExportParameters(true);
+
+                byte[] privateCertRawBytes = new byte[rSAParameters.Modulus.Length +
+                                                        rSAParameters.Exponent.Length +
+                                                        rSAParameters.D.Length +
+                                                        rSAParameters.P.Length +
+                                                        rSAParameters.Q.Length +
+                                                        rSAParameters.DP.Length +
+                                                        rSAParameters.DQ.Length +
+                                                        rSAParameters.InverseQ.Length
+                                                        ];
+
+                int index = 0;
+                rSAParameters.Modulus.CopyTo(privateCertRawBytes, index);
+                index += rSAParameters.Modulus.Length;
+
+                rSAParameters.Exponent.CopyTo(privateCertRawBytes, index);
+                index += rSAParameters.Exponent.Length;
+
+                rSAParameters.D.CopyTo(privateCertRawBytes, index);
+                index += rSAParameters.D.Length;
+
+                rSAParameters.P.CopyTo(privateCertRawBytes, index);
+                index += rSAParameters.P.Length;
+
+                rSAParameters.Q.CopyTo(privateCertRawBytes, index);
+                index += rSAParameters.Q.Length;
+
+                rSAParameters.DP.CopyTo(privateCertRawBytes, index);
+                index += rSAParameters.DP.Length;
+
+                rSAParameters.DQ.CopyTo(privateCertRawBytes, index);
+                index += rSAParameters.DQ.Length;
+
+                rSAParameters.InverseQ.CopyTo(privateCertRawBytes, index);
+
+                privateCert = Convert.ToBase64String(privateCertRawBytes);
+            }
+            catch
+            {
+                throw new Exception(string.Format("Error Loading Private Key From Cert: {0}", CertSubjectName));
+            }
+
+            return privateCert;
         }
     }
 }

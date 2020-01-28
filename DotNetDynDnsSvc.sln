@@ -15,7 +15,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetDynDnsSvc.Model", "Su
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetDynDnsSvc.Tests", "Subprojects\DotNetDynDnsSvc.Tests\DotNetDynDnsSvc.Tests.csproj", "{1E4D1724-6D67-4067-8D64-F0579C237F55}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetDynDnsSvc.Common", "Subprojects\DotNetDynDnsSvc.Common\DotNetDynDnsSvc.Common.csproj", "{7947C4D3-6608-43F3-83AC-75BB435EDCEE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetDynDnsSvc.Common", "Subprojects\DotNetDynDnsSvc.Common\DotNetDynDnsSvc.Common.csproj", "{7947C4D3-6608-43F3-83AC-75BB435EDCEE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F0D813B8-0437-4E77-99F2-857D1C45C158}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
