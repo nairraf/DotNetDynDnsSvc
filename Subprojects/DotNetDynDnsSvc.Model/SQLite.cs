@@ -30,15 +30,16 @@ namespace DotNetDynDnsSvc.Model
 
                 while (sqlReader.Read())
                 {
-                    // see if we have a user name
-                    if ((sqlReader.GetString(0)).Length > 0)
-                    {
-                        dbUser.username = sqlReader.GetString(0);
-                        dbUser.key = sqlReader.GetString(1);
-                        dbUser.resourceRecord = sqlReader.GetString(2);
-                        dbUser.zone = sqlReader.GetString(3);
-                        dbUser.LoadActions(sqlReader.GetString(4));
-                    }
+                    dbUser.username = sqlReader.GetString(0);
+                    dbUser.key = sqlReader.GetString(1);
+
+                    if ( ! sqlReader.IsDBNull(2))
+                        dbUser.resourceRecord = sqlReader.GetString(2).ToString();
+                        
+                    if ( ! sqlReader.IsDBNull(3))
+                        dbUser.zone = sqlReader.GetString(3).ToString();
+
+                    dbUser.LoadActions(sqlReader.GetString(4));
                 }
 
                 sqlReader.Close();
