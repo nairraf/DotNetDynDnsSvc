@@ -1,0 +1,7 @@
+InitialSeed: Cert=DotNetDynDnsSvc Security Certificate
+# Example of a text based initial seed, Preference is to use a certificate. If that is not possible, generate a new seed using the KeyGenerator tool
+#InitialSeed: mq7yVHsdiajN8XfkeCRyhWQg8zbDUNXFIy+NIyM2bpfa0evQ5Zubol/snU6qWK8cdtEoxyIaWfPGHEUZq3oBxvd5EA6PRkHlIVG
+DnsServer: myDnsServer.FQ.DN
+DnsServerUserName: .\dnsadmin
+DnsServerUserPasswordCipher: T/dCLj1t1TaKMIs0OuEfU+vzB+gK0zU1w==
+RealClientIpHostHeader: X_FORWARDED_FOR
