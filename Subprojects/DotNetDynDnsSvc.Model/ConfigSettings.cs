@@ -11,5 +11,6 @@ namespace DotNetDynDnsSvc.Model
         public string DnsServerUserName { get; set; }
         public string DnsServerUserPasswordCipher { get; set; }
         public string RealClientIpHostHeader { get; set; }
+        public int TTLSeconds { get; set; }
     }
 }

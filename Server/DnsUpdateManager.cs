@@ -68,6 +68,7 @@ namespace DotNetDynDnsSvc.Server
                     {
                         ManagementBaseObject properties = m.GetMethodParameters("Modify");
                         properties["IPAddress"] = IpAddress;
+                        properties["TTL"] = _config.Settings.TTLSeconds;
                         m.InvokeMethod("Modify", properties, null);
                     }
                 }

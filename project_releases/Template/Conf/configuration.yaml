@@ -5,3 +5,4 @@ DnsServer: myDnsServer.FQ.DN
 DnsServerUserName: .\dnsadmin
 DnsServerUserPasswordCipher: T/dCLj1t1TaKMIs0OuEfU+vzB+gK0zU1w==
 RealClientIpHostHeader: X_FORWARDED_FOR
+TTLSeconds: 30
